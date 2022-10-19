@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 import logo from '../../assets/images/Logo.png';
 
 function SignUpPage() {
@@ -32,7 +33,9 @@ function SignUpPage() {
         </Input>
         <Button type='submit'>Cadastrar</Button>
       </Form>
-      <ButtonSwap>Já tem uma conta? Faça login!</ButtonSwap>
+      <Link to='/'>
+        <ButtonSwap>Já tem uma conta? Faça login!</ButtonSwap>
+      </Link>
     </PageContainer>
   );
 }

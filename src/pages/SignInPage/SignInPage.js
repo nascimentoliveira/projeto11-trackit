@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 import logo from '../../assets/images/Logo.png';
 
 function SignInPage() {
@@ -20,9 +21,13 @@ function SignInPage() {
             required>
 
           </Input>
-          <Button type='submit'>Entrar</Button>
+          <Link to='/hoje'>
+            <Button type='submit'>Entrar</Button>
+          </Link>
         </Form>
-        <ButtonSwap>Não tem uma conta? Cadastre-se!</ButtonSwap>
+        <Link to='/cadastro'>
+          <ButtonSwap>Não tem uma conta? Cadastre-se!</ButtonSwap>
+        </Link>
       </PageContainer>
     );
   }

@@ -1,25 +1,32 @@
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 import { CircularProgressbarWithChildren, buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 
 function MenuFooter() {
   return (
     <MenuFooterComponent>
-      <Button>Hábitos</Button>
-      <ButtonToday>
-        <CircularProgressbarWithChildren
-          value={30}
-          background
-          backgroundPadding={6}
-          styles={buildStyles({
-            backgroundColor: '#52B6FF',
-            pathColor: '#FFFFFF',
-            trailColor: 'transparent',
-          })}>
-          <div>Hoje</div>
-        </CircularProgressbarWithChildren>
-      </ButtonToday>
-      <Button>Histórico</Button>
+      <Link to='/habitos'>
+        <Button>Hábitos</Button>
+      </Link>
+      <Link to='/hoje'>
+        <ButtonToday>
+          <CircularProgressbarWithChildren
+            value={30}
+            background
+            backgroundPadding={6}
+            styles={buildStyles({
+              backgroundColor: '#52B6FF',
+              pathColor: '#FFFFFF',
+              trailColor: 'transparent',
+            })}>
+            <div>Hoje</div>
+          </CircularProgressbarWithChildren>
+        </ButtonToday>
+      </Link>
+      <Link to='/historico'>
+        <Button>Histórico</Button>
+      </Link>
     </MenuFooterComponent>
   );
 }
