@@ -1,9 +1,20 @@
 import styled from 'styled-components';
+import dayjs from 'dayjs';
 
 function NavToday() {
+  const dictWeekDays = {
+    'Monday': 'Segunda',
+    'Tuesday': 'Terça', 
+    'Wednesday': 'Quarta',
+    'Thursday': 'Quinta', 
+    'Friday': 'Sexta',
+    'Saturday': 'Sábado',
+    'Sunday': 'Domingo'
+  }
+
   return (
     <NavTodayComponent>
-      <Today>Segunda, 17/05</Today>
+      <Today>{dictWeekDays[dayjs().format('dddd')]}, {dayjs().format('DD/MM')}</Today>
       <Status>Nenhum hábito concluído ainda</Status>
     </NavTodayComponent>
   );
