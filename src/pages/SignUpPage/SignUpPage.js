@@ -1,36 +1,80 @@
 import styled from 'styled-components';
+import axios from 'axios';
 import { Link } from 'react-router-dom';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { SIGN_UP_URL } from '../../constants/urls';
 import logo from '../../assets/images/Logo.png';
 
 function SignUpPage() {
+
+  const navigate = useNavigate();
+  const [user, setUser] = useState({
+    email: '',
+    name: '',
+    image: '',
+    password: ''
+  })
+
+  function handleForm(e) {
+    const { name, value } = e.target;
+    setUser({ ...user, [name]: value });
+  }
+
+  function SignUp(e) {
+    e.preventDefault();
+    console.log(user);
+    axios.post(SIGN_UP_URL, user)
+      .then(res => {
+        console.log(res)
+        navigate('/')
+      })
+      .catch(err => {
+        alert(err.response.data.message)
+      });
+  }
+
+
   return (
     <PageContainer>
       <img src={logo} alt='' />
-      <Form>
+      <Form onSubmit={SignUp}>
         <Input
           type='email'
           placeholder='email'
           name='email'
+          value={user.email}
+          onChange={handleForm}
           required>
         </Input>
+
         <Input
           type='password'
           placeholder='senha'
-          name='psw'
+          name='password'
+          value={user.password}
+          onChange={handleForm}
           required>
         </Input>
+
         <Input
           type='text'
           placeholder='nome'
-          name='userName'
+          name='name'
+          value={user.nome}
+          onChange={handleForm}
           required>
         </Input>
+
         <Input
           type='text'
           placeholder='foto'
-          name='userImage'
+          name='image'
+          value={user.image}
+          onChange={handleForm}
           required>
         </Input>
+
         <Button type='submit'>Cadastrar</Button>
       </Form>
       <Link to='/'>

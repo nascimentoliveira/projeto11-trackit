@@ -1,37 +1,64 @@
 import styled from 'styled-components';
+import axios from 'axios';
 import { Link } from 'react-router-dom';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { SIGN_IN_URL } from '../../constants/urls';
 import logo from '../../assets/images/Logo.png';
 
 function SignInPage() {
-    return (
-      <PageContainer>
-        <img src={logo} alt='' />
-        <Form>
-          <Input 
-            type='email' 
-            placeholder='email' 
-            name='email' 
-            required>
-        
-          </Input>
-          <Input 
-            type='password' 
-            placeholder='senha' 
-            name='psw' 
-            required>
 
-          </Input>
-          <Link to='/hoje'>
-            <Button type='submit'>Entrar</Button>
-          </Link>
-        </Form>
-        <Link to='/cadastro'>
-          <ButtonSwap>Não tem uma conta? Cadastre-se!</ButtonSwap>
-        </Link>
-      </PageContainer>
-    );
+  const navigate = useNavigate();
+  const [user, setUser] = useState({ email: '', password: '' })
+
+  function handleForm(e) {
+    const { name, value } = e.target
+    setUser({ ...user, [name]: value })
   }
-  
+
+  function SignIn(e) {
+    e.preventDefault();
+    axios.post(SIGN_IN_URL, user)
+      .then(res => {
+        console.log(res);
+        navigate('/hoje');
+      })
+      .catch(err => alert(err.response.data.message));
+  }
+
+  return (
+    <PageContainer>
+      <img src={logo} alt='' />
+      <Form onSubmit={SignIn}>
+        <Input
+          type='email'
+          placeholder='email'
+          name='email'
+          value={user.email}
+          onChange={handleForm}
+          required
+        >
+        </Input>
+
+        <Input
+          type='password'
+          placeholder='senha'
+          name='password'
+          value={user.password}
+          onChange={handleForm}
+          required
+        >
+        </Input>
+
+        <Button type='submit'>Entrar</Button>
+      </Form>
+      <Link to='/cadastro'>
+        <ButtonSwap>Não tem uma conta? Cadastre-se!</ButtonSwap>
+      </Link>
+    </PageContainer>
+  );
+}
+
 export default SignInPage;
 
 const PageContainer = styled.main`
@@ -55,7 +82,7 @@ const Form = styled.form`
   flex-direction: column;
   align-items: center;
 `;
-    
+
 const Input = styled.input`
   width: 100%;
   height: 45px;
