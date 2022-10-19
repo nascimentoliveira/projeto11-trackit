@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import Header from '../../components/Header';
 import AddHabit from '../../components/NavHabit';
 import Habits from '../../components/Habits';
-import Footer from '../../components/Footer';
+import MenuFooter from '../../components/MenuFooter';
 
 function HabitsPage() {
   return (
@@ -10,7 +10,7 @@ function HabitsPage() {
       <Header />
       <AddHabit />
       <Habits />
-      <Footer />
+      <MenuFooter />
     </PageContainer>
   );
 }

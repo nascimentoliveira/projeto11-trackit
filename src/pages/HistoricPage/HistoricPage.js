@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import Header from '../../components/Header';
 import NavHistoric from '../../components/NavHistoric';
 import Historic from '../../components/Historic';
-import Footer from '../../components/Footer';
+import MenuFooter from '../../components/MenuFooter';
 
 function HistoricPage() {
   return (
@@ -10,7 +10,7 @@ function HistoricPage() {
       <Header />
       <NavHistoric />
       <Historic />
-      <Footer />
+      <MenuFooter />
     </PageContainer>
   );
 }

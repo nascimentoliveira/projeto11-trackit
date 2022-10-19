@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import Header from '../../components/Header';
 import NavToday from '../../components/NavToday';
-import Footer from '../../components/Footer';
+import MenuFooter from '../../components/MenuFooter';
 
 
 function TodayPage() {
@@ -9,7 +9,7 @@ function TodayPage() {
     <PageContainer>
       <Header />
       <NavToday />
-      <Footer />
+      <MenuFooter />
     </PageContainer>
   );
 }
