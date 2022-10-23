@@ -26,6 +26,7 @@ export default function SignInPage() {
     axios.post(SIGN_IN_URL, user)
       .then(res => {
         setToken(res.data.token);
+        console.log(res.data.token)
         navigate('/hoje');
       })
       .catch(err => {

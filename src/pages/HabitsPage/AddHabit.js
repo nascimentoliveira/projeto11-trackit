@@ -9,7 +9,7 @@ import { CREATE_HABIT_URL } from '../../constants/urls';
 export default function AddHabit() {
 
   const daysWeek = ['D', 'S', 'T', 'Q', 'Q', 'S', 'S'];
-  const { showAddHabit, setShowAddHabit } = useContext(HabitContext);
+  const { showAddHabit, setShowAddHabit, setRefresh } = useContext(HabitContext);
   const { token } = useContext(UserContext);
   const [formEnabled, setFormEnabled] = useState(true);
   const [habit, setHabit] = useState({
@@ -45,6 +45,7 @@ export default function AddHabit() {
     axios.post(CREATE_HABIT_URL, habit, config)
       .then(res => {
         setShowAddHabit(!showAddHabit)
+        setRefresh(true)
         setFormEnabled(true);
       })
       .catch(err => {

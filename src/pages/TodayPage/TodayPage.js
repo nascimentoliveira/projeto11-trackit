@@ -1,20 +1,20 @@
 import styled from 'styled-components';
 import Header from '../../components/Header';
-import NavToday from '../../components/NavToday';
+import NavToday from './NavToday';
+import HabitsToday from './HabitsToday';
 import MenuFooter from '../../components/MenuFooter';
 
 
-function TodayPage() {
+export default function TodayPage() {
   return (
     <PageContainer>
       <Header />
       <NavToday />
+      <HabitsToday />
       <MenuFooter />
     </PageContainer>
   );
 }
-
-export default TodayPage;
 
 const PageContainer = styled.main`
   width: 100%;

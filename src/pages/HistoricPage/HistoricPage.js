@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import Header from '../../components/Header';
-import NavHistoric from '../../components/NavHistoric';
-import Historic from '../../components/Historic';
+import NavHistoric from './NavHistoric';
+import Historic from './Historic';
 import MenuFooter from '../../components/MenuFooter';
 
 function HistoricPage() {

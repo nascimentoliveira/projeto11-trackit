@@ -1,12 +1,14 @@
 import styled from 'styled-components';
 import dayjs from 'dayjs';
+//import 'dayjs/locale/pt-br'
+//dayjs.locale('pt-br')
 
-function NavToday() {
+export default function NavToday() {
   const dictWeekDays = {
     'Monday': 'Segunda',
-    'Tuesday': 'Terça', 
+    'Tuesday': 'Terça',
     'Wednesday': 'Quarta',
-    'Thursday': 'Quinta', 
+    'Thursday': 'Quinta',
     'Friday': 'Sexta',
     'Saturday': 'Sábado',
     'Sunday': 'Domingo'
@@ -20,9 +22,8 @@ function NavToday() {
   );
 }
 
-export default NavToday;
-
 const NavTodayComponent = styled.nav`
+  max-width: 375px;
   width: 100%;
   font-family: 'Lexend Deca', sans-serif;
   display: flex;

@@ -1,21 +1,19 @@
 import styled from 'styled-components';
-import { useState } from 'react';
 import AddHabit from './AddHabit';
 import HabitContext from './HabitContext';
+import { useContext } from 'react';
 
 export default function NavHabit() {
 
-  const [showAddHabit, setShowAddHabit] = useState(false);
+  const { showAddHabit, setShowAddHabit } = useContext(HabitContext);
 
   return (
     <NavHabitComponent>
-      <HabitContext.Provider value={{ showAddHabit, setShowAddHabit }}>
-        <NavOption>
-          Meus hábitos
-          <button onClick={() => setShowAddHabit(!showAddHabit)}>+</button>
-        </NavOption>
-        {showAddHabit ? <AddHabit /> : ''}
-      </HabitContext.Provider>
+      <NavOption>
+        Meus hábitos
+        <button onClick={() => setShowAddHabit(!showAddHabit)}>+</button>
+      </NavOption>
+      {showAddHabit ? <AddHabit /> : ''}
     </NavHabitComponent>
   );
 }

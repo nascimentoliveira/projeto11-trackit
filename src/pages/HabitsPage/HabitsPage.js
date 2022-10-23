@@ -3,15 +3,23 @@ import Header from '../../components/Header';
 import NavHabit from './NavHabit';
 import Habits from './Habits';
 import MenuFooter from '../../components/MenuFooter';
+import HabitContext from './HabitContext';
+import { useState } from 'react';
 
 export default function HabitsPage() {
+
+  const [showAddHabit, setShowAddHabit] = useState(false);
+  const [refresh, setRefresh] = useState(false);
+
   return (
-    <PageContainer>
-      <Header />
-      <NavHabit />
-      <Habits />
-      <MenuFooter />
-    </PageContainer>
+    <HabitContext.Provider value={{ showAddHabit, setShowAddHabit, refresh, setRefresh }}>
+      <PageContainer>
+        <Header />
+        <NavHabit />
+        <Habits />
+        <MenuFooter />
+      </PageContainer>
+    </HabitContext.Provider>
   );
 }
 

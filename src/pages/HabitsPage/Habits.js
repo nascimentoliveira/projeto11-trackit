@@ -1,14 +1,17 @@
 import styled from 'styled-components';
 import axios from 'axios';
 import UserContext from '../../UserContext';
+import HabitContext from './HabitContext';
 import { TrashOutline } from 'react-ionicons';
 import { HABITS_LIST_URL, DELETE_HABIT_URL } from '../../constants/urls';
 import { useState, useContext, useEffect } from 'react';
+
 
 export default function Habits() {
 
   const daysWeek = ['D', 'S', 'T', 'Q', 'Q', 'S', 'S'];
   const { token } = useContext(UserContext);
+  const { refresh, setRefresh } = useContext(HabitContext);
   const [habitsList, setHabitsList] = useState([]);
 
   const config = {
@@ -19,21 +22,21 @@ export default function Habits() {
 
   function getHabit() {
     axios.get(HABITS_LIST_URL, config)
-      .then(res => setHabitsList(res.data))
+      .then(res => {
+        setHabitsList(res.data)
+        setRefresh(false)
+      })
       .catch(err => console.log(err.response.data))
   }
 
-  useEffect(getHabit, [])
-
-  console.log(habitsList);
+  useEffect(getHabit, [refresh])
 
   function deleteHabit(id) {
     axios.delete(`${DELETE_HABIT_URL}${id}`, config)
-      .then(getHabit)
+      .then(setRefresh(true))
       .catch(err => console.log(err.response.data))
   }
 
-  console.log(habitsList.length)
   if (habitsList.length === 0) {
     return (
       <HabitComponent>

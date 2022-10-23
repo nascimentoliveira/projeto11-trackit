@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { SIGN_UP_URL } from '../../constants/urls';
-import { SIGN_UP_COLORS } from '../../constants/colors';
 import logo from '../../assets/images/Logo.png';
 import Spinner from '../../components/Spinner';
 
@@ -140,7 +139,7 @@ const Input = styled.input`
     font-family: 'Lexend Deca', sans-serif;
     font-size: 20px;
     line-height: 25px;
-    color: ${SIGN_UP_COLORS.active.inputText};
+    color: #666666;
   }
 
   &:focus {
