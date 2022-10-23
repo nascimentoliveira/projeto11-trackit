@@ -1,17 +1,21 @@
 import styled from 'styled-components';
+import UserContext from '../UserContext';
+import { useContext } from 'react';
 
-function Header() {
+
+export default function Header() {
+
+  const { user } = useContext(UserContext);
+
   return (
     <HeaderComponent>
       <Logo>TrackIt</Logo>
       <User>
-        <img src='https://as2.ftcdn.net/v2/jpg/05/09/51/19/1000_F_509511952_jRFPLFJaVREHZ5zRTlwmIZBSvFWMcazK.jpg' alt='' />
+        <img src={user.image} alt={`Imagem de ${user.name}`} />
       </User>
     </HeaderComponent>
   );
 }
-
-export default Header;
 
 const HeaderComponent = styled.header`
   width: 100%;

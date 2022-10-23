@@ -9,49 +9,51 @@ import { CREATE_HABIT_URL } from '../../constants/urls';
 export default function AddHabit() {
 
   const daysWeek = ['D', 'S', 'T', 'Q', 'Q', 'S', 'S'];
-  const { showAddHabit, setShowAddHabit, setRefresh } = useContext(HabitContext);
-  const { token } = useContext(UserContext);
+  const { user } = useContext(UserContext);
   const [formEnabled, setFormEnabled] = useState(true);
-  const [habit, setHabit] = useState({
-    name: '',
-    days: []
-  });
+  const { 
+    showAddHabit, 
+    setShowAddHabit, 
+    setRefresh,
+    newHabit,
+    setNewHabit
+  } = useContext(HabitContext);
 
   function handleForm(e) {
     const { name, value } = e.target
-    setHabit({ ...habit, [name]: value })
+    setNewHabit({ ...newHabit, [name]: value })
   }
 
   function handleDays(day) {
     let newDays = [];
-    if (habit.days.some((x) => x === day)) {
-      habit.days.splice(habit.days.indexOf(day), 1);
-      newDays = habit.days
+    if (newHabit.days.some((x) => x === day)) {
+      newHabit.days.splice(newHabit.days.indexOf(day), 1);
+      newDays = newHabit.days
     }
     else
-      newDays = [...habit.days, day];
-    setHabit({ ...habit, days: newDays })
+      newDays = [...newHabit.days, day];
+      setNewHabit({ ...newHabit, days: newDays })
   }
 
   function sendHabit(e) {
     const config = {
       headers: {
-        Authorization: `Bearer ${token}`
+        Authorization: `Bearer ${user.token}`
       }
     }
 
     setFormEnabled(false);
     e.preventDefault();
-    axios.post(CREATE_HABIT_URL, habit, config)
+    axios.post(CREATE_HABIT_URL, newHabit, config)
       .then(res => {
         setShowAddHabit(!showAddHabit)
+        setNewHabit({ name: '', days: [] })
         setRefresh(true)
-        setFormEnabled(true);
       })
       .catch(err => {
         alert(err.response.data.message)
-        setFormEnabled(true);
       });
+    setFormEnabled(true);
   }
 
   return (
@@ -60,7 +62,7 @@ export default function AddHabit() {
         type='text'
         placeholder='nome do hábito'
         name='name'
-        value={habit.name}
+        value={newHabit.name}
         onChange={handleForm}
         disabled={!formEnabled}
         required
@@ -74,19 +76,16 @@ export default function AddHabit() {
             value={day}
             disabled={!formEnabled}
             onClick={() => handleDays(index)}
-            isSelected={habit.days.some((x) => x === index)}
+            isSelected={newHabit.days.some((x) => x === index)}
           />
         )}
       </WeekDays>
       <Options>
         <InputCancel
-          type='reset'
+          type='button'
           value='Cancelar'
           disabled={!formEnabled}
-          onClick={() => {
-            setHabit({ name: '', days: [] })
-            setShowAddHabit(!showAddHabit)
-          }}
+          onClick={() => setShowAddHabit(!showAddHabit)}
         />
         <InputSubmit
           type='submit'

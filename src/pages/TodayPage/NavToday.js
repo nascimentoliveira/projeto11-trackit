@@ -1,9 +1,14 @@
 import styled from 'styled-components';
 import dayjs from 'dayjs';
+import UserContext from '../../UserContext';
+import { useContext } from 'react';
 //import 'dayjs/locale/pt-br'
 //dayjs.locale('pt-br')
 
 export default function NavToday() {
+
+  const { progress } = useContext(UserContext);
+
   const dictWeekDays = {
     'Monday': 'Segunda',
     'Tuesday': 'Terça',
@@ -17,7 +22,13 @@ export default function NavToday() {
   return (
     <NavTodayComponent>
       <Today>{dictWeekDays[dayjs().format('dddd')]}, {dayjs().format('DD/MM')}</Today>
-      <Status>Nenhum hábito concluído ainda</Status>
+      <Status some={(progress>0)}>
+        {(progress===0) ?
+          'Nenhum hábito concluído ainda'
+          :
+          `${progress}% dos hábitos concluído`
+        }
+      </Status>
     </NavTodayComponent>
   );
 }
@@ -41,5 +52,5 @@ const Today = styled.span`
 const Status = styled.span`
   font-size: 18px;
   line-height: 22px;
-  color: #BABABA;
+  color: ${props => props.some ? '#8FC549' : '#BABABA'};;
 `;

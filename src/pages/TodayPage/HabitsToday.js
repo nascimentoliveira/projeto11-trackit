@@ -7,20 +7,25 @@ import { Checkbox } from 'react-ionicons';
 
 export default function HabitsToday() {
 
-  const { token } = useContext(UserContext);
+  const { user, setProgress } = useContext(UserContext);
   const [habitsList, setHabitsList] = useState([]);
   const [refresh, setRefresh] = useState(false);
 
   const config = {
     headers: {
-      Authorization: `Bearer ${token}`
+      Authorization: `Bearer ${user.token}`
     }
+  }
+
+  function calProgress(habisDone) {
+    return Math.round((habisDone.filter(x => x).length/habisDone.length)*100);
   }
 
   function getHabitsList() {
     axios.get(HABITS_LIST_TODAY_URL, config)
       .then(res => {
         setHabitsList(res.data)
+        setProgress(calProgress(res.data.map(habit => habit.done)))
         setRefresh(false)
       })
       .catch(err => console.log(err.response.data))

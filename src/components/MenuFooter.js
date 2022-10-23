@@ -1,9 +1,14 @@
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import UserContext from '../UserContext';
+import { useContext } from 'react';
 import { CircularProgressbarWithChildren, buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 
 function MenuFooter() {
+
+  const { progress } = useContext(UserContext);
+
   return (
     <MenuFooterComponent>
       <Link to='/habitos'>
@@ -12,7 +17,7 @@ function MenuFooter() {
       <Link to='/hoje'>
         <ButtonToday>
           <CircularProgressbarWithChildren
-            value={30}
+            value={progress}
             background
             backgroundPadding={6}
             styles={buildStyles({

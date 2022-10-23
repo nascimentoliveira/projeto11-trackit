@@ -10,13 +10,13 @@ import { useState, useContext, useEffect } from 'react';
 export default function Habits() {
 
   const daysWeek = ['D', 'S', 'T', 'Q', 'Q', 'S', 'S'];
-  const { token } = useContext(UserContext);
+  const { user } = useContext(UserContext);
   const { refresh, setRefresh } = useContext(HabitContext);
   const [habitsList, setHabitsList] = useState([]);
 
   const config = {
     headers: {
-      Authorization: `Bearer ${token}`
+      Authorization: `Bearer ${user.token}`
     }
   }
 

@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import AddHabit from './AddHabit';
 import HabitContext from './HabitContext';
 import { useContext } from 'react';
+import { CloseOutline, AddOutline } from 'react-ionicons';
 
 export default function NavHabit() {
 
@@ -11,7 +12,23 @@ export default function NavHabit() {
     <NavHabitComponent>
       <NavOption>
         Meus hábitos
-        <button onClick={() => setShowAddHabit(!showAddHabit)}>+</button>
+        <button onClick={() => setShowAddHabit(!showAddHabit)}>
+        {showAddHabit ? 
+          <CloseOutline
+            color={'#FFFFFF'} 
+            title={'Fechar'}
+            height='20px'
+            width='20px'
+          /> 
+          : 
+          <AddOutline
+            color={'#FFFFFF'} 
+            title={'Adicionar'}
+            height='20px'
+            width='20px'
+          />
+        }
+        </button>
       </NavOption>
       {showAddHabit ? <AddHabit /> : ''}
     </NavHabitComponent>

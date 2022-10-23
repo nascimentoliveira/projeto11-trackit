@@ -10,9 +10,21 @@ export default function HabitsPage() {
 
   const [showAddHabit, setShowAddHabit] = useState(false);
   const [refresh, setRefresh] = useState(false);
+  const [newHabit, setNewHabit] = useState({
+    name: '',
+    days: []
+  });
 
   return (
-    <HabitContext.Provider value={{ showAddHabit, setShowAddHabit, refresh, setRefresh }}>
+    <HabitContext.Provider value={
+      { showAddHabit, 
+        setShowAddHabit, 
+        refresh, 
+        setRefresh,
+        newHabit,
+        setNewHabit
+      }
+    }>
       <PageContainer>
         <Header />
         <NavHabit />

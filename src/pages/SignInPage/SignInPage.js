@@ -10,28 +10,27 @@ import Spinner from '../../components/Spinner';
 
 export default function SignInPage() {
 
-  const { setToken } = useContext(UserContext);
+  const { user, setUser } = useContext(UserContext);
   const navigate = useNavigate();
   const [formEnabled, setFormEnabled] = useState(true);
-  const [user, setUser] = useState({ email: '', password: '' });
+  const [form, SetForm] = useState({ email: '', password: '' });
 
   function handleForm(e) {
     const { name, value } = e.target
-    setUser({ ...user, [name]: value })
+    SetForm({ ...form, [name]: value })
   }
 
   function SignIn(e) {
     setFormEnabled(false);
     e.preventDefault();
-    axios.post(SIGN_IN_URL, user)
+    axios.post(SIGN_IN_URL, form)
       .then(res => {
-        setToken(res.data.token);
-        console.log(res.data.token)
+        setUser(res.data);
         navigate('/hoje');
       })
       .catch(err => {
         alert(err.response.data.message)
-        setUser({ email: '', password: '' });
+        SetForm({ email: '', password: '' });
         setFormEnabled(true);
       });
   }
@@ -44,7 +43,7 @@ export default function SignInPage() {
           type='email'
           placeholder='email'
           name='email'
-          value={user.email}
+          value={form.email}
           onChange={handleForm}
           disabled={!formEnabled}
           required
@@ -55,7 +54,7 @@ export default function SignInPage() {
           type='password'
           placeholder='senha'
           name='password'
-          value={user.password}
+          value={form.password}
           onChange={handleForm}
           disabled={!formEnabled}
           required

@@ -28,8 +28,7 @@ export default function SignUpPage() {
     e.preventDefault();
     console.log(user);
     axios.post(SIGN_UP_URL, user)
-      .then(res => {
-        console.log(res)
+      .then(() => {
         navigate('/')
       })
       .catch(err => {
