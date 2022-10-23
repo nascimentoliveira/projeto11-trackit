@@ -22,7 +22,7 @@ export default function NavHabit() {
 
 const NavHabitComponent = styled.nav`
   font-family: 'Lexend Deca', sans-serif;
-  max-width: 500px;
+  max-width: 375px;
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -35,7 +35,7 @@ const NavOption = styled.section`
   width: 100%;
   height: 85px;
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   font-size: 23px;
   line-height: 29px;
   color: #126BA5;

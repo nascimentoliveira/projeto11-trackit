@@ -100,6 +100,7 @@ export default function AddHabit() {
 }
 
 const AddHabitComponent = styled.form`
+  max-width: 375px;
   width: 100%;
   height: 180px;
   background: #FFFFFF;
