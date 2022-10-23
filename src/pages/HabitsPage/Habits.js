@@ -11,6 +11,8 @@ function Habits() {
 export default Habits;
 
 const HabitComponent = styled.section`
+  max-width: 500px;
+  width: 100%;
   font-family: 'Lexend Deca', sans-serif; 
   font-size: 18px;
   line-height: 22px;

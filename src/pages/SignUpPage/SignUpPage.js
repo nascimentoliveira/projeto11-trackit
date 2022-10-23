@@ -90,7 +90,7 @@ export default function SignUpPage() {
         </Input>
 
         <Button type='submit' disabled={!formEnabled}>
-        {formEnabled ? 'Cadastrar' : Spinner()}
+          {formEnabled ? 'Cadastrar' : Spinner('60')}
         </Button>
       </Form>
       <Link to='/'>
@@ -128,11 +128,12 @@ const Input = styled.input`
   font-family: 'Lexend Deca', sans-serif;
   font-size: 20px;
   line-height: 25px;
-  color: ${SIGN_UP_COLORS.active.inputText};
-  background-color: ${SIGN_UP_COLORS.active.inputBackground};
-  border: 1px solid ${SIGN_UP_COLORS.active.inputBorder};
+  color: #666666;
+  background-color: #FFFFFF;
+  border: 1px solid #D5D5D5;
   border-radius: 5px;
   margin: 3px;
+  padding: 0px 11px;
   box-sizing: border-box;
 
   &::placeholder {
@@ -147,17 +148,17 @@ const Input = styled.input`
   }
 
   &:-webkit-autofill {
-    -webkit-text-fill-color: ${SIGN_UP_COLORS.active.inputText};
-    -webkit-box-shadow: 0 0 0px 45px ${SIGN_UP_COLORS.active.inputBackground} inset;
-    box-shadow: 0 0 0px 45px ${SIGN_UP_COLORS.active.inputBackground} inset
+    -webkit-text-fill-color: #666666;
+    -webkit-box-shadow: 0 0 0px 45px #FFFFFF inset;
+    box-shadow: 0 0 0px 45px #FFFFFF inset
   }
 
   &:disabled {
-    color: ${SIGN_UP_COLORS.inactive.inputText};
-    background-color: ${SIGN_UP_COLORS.inactive.inputBackground};
-    -webkit-text-fill-color: ${SIGN_UP_COLORS.inactive.inputText};
-    -webkit-box-shadow: 0 0 0px 45px ${SIGN_UP_COLORS.inactive.inputBackground} inset;
-    box-shadow: 0 0 0px 45px ${SIGN_UP_COLORS.inactive.inputBackground} inset;
+    color: #AFAFAF;
+    background-color: #F2F2F2;
+    -webkit-text-fill-color: #AFAFAF;
+    -webkit-box-shadow: 0 0 0px 45px #F2F2F2 inset;
+    box-shadow: 0 0 0px 45px #F2F2F2 inset;
   }
 `;
 
@@ -167,9 +168,9 @@ const Button = styled.button`
   height: 45px;
   font-size: 21px;
   line-height: 26px;
-  color: ${SIGN_UP_COLORS.active.textButton};
-  background-color: ${SIGN_UP_COLORS.active.button};
-  opacity: ${SIGN_UP_COLORS.active.buttonOpacity};
+  color: #FFFFFF;
+  background-color: #52B6FF;
+  opacity: 1;
   border-radius: 5px;
   margin: 3px;
   border: none;
@@ -179,7 +180,7 @@ const Button = styled.button`
   align-items: center;
 
   &:disabled {
-    opacity: ${SIGN_UP_COLORS.inactive.buttonOpacity};
+    opacity: .7;
   }
 `;
 
@@ -191,7 +192,7 @@ const ButtonSwap = styled.button`
   box-sizing: border-box;
   text-decoration-line: underline;
   background-color: transparent;
-  color: ${SIGN_UP_COLORS.active.buttonSwapText};
+  color: #52B6FF;
   border: none;
   outline: none;
 `;

@@ -1,10 +1,10 @@
 import { ThreeDots } from 'react-loader-spinner';
 
-export default function Spinner() {
+export default function Spinner(size) {
   return (
     <ThreeDots
-      height='60'
-      width='60'
+      height={size}
+      width={size}
       radius='9'
       color='#FFFFFF'
       ariaLabel='three-dots-loading'

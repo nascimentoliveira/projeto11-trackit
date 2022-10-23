@@ -1,15 +1,16 @@
 import styled from 'styled-components';
 import axios from 'axios';
+import UserContext from '../../UserContext';
 import { Link } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { SIGN_IN_URL } from '../../constants/urls';
-import { SIGN_IN_COLORS } from '../../constants/colors';
 import logo from '../../assets/images/Logo.png';
 import Spinner from '../../components/Spinner';
 
 export default function SignInPage() {
 
+  const { setToken } = useContext(UserContext);
   const navigate = useNavigate();
   const [formEnabled, setFormEnabled] = useState(true);
   const [user, setUser] = useState({ email: '', password: '' });
@@ -24,7 +25,7 @@ export default function SignInPage() {
     e.preventDefault();
     axios.post(SIGN_IN_URL, user)
       .then(res => {
-        //console.log(res);
+        setToken(res.data.token);
         navigate('/hoje');
       })
       .catch(err => {
@@ -61,7 +62,7 @@ export default function SignInPage() {
         </Input>
 
         <Button type='submit' disabled={!formEnabled}>
-          {formEnabled ? 'Entrar' : Spinner()}
+          {formEnabled ? 'Entrar' : Spinner('60')}
         </Button>
       </Form>
       <Link to='/cadastro'>
@@ -99,10 +100,11 @@ const Input = styled.input`
   font-family: 'Lexend Deca', sans-serif;
   font-size: 20px;
   line-height: 25px;
-  color: ${SIGN_IN_COLORS.active.inputText};
-  background-color: ${SIGN_IN_COLORS.active.inputBackground};
-  border: 1px solid ${SIGN_IN_COLORS.active.inputBorder};
+  color: #666666;
+  background-color: #FFFFFF;
+  border: 1px solid #D5D5D5;
   border-radius: 5px;
+  padding: 0px 11px;
   margin: 3px;
   box-sizing: border-box;
   
@@ -110,7 +112,7 @@ const Input = styled.input`
     font-family: 'Lexend Deca', sans-serif;
     font-size: 20px;
     line-height: 25px;
-    color: ${SIGN_IN_COLORS.active.inputText};
+    color: #DBDBDB;
   }
 
   &:focus {
@@ -118,17 +120,17 @@ const Input = styled.input`
   }
 
   &:-webkit-autofill {
-    -webkit-text-fill-color: ${SIGN_IN_COLORS.active.inputText};
-    -webkit-box-shadow: 0 0 0px 45px ${SIGN_IN_COLORS.active.inputBackground} inset;
-    box-shadow: 0 0 0px 45px ${SIGN_IN_COLORS.active.inputBackground} inset;
+    -webkit-text-fill-color: #666666;
+    -webkit-box-shadow: 0 0 0px 45px #FFFFFF inset;
+    box-shadow: 0 0 0px 45px #FFFFFF inset;
   }
 
   &:disabled {
-    color: ${SIGN_IN_COLORS.inactive.inputText};
-    background-color: ${SIGN_IN_COLORS.inactive.inputBackground};
-    -webkit-text-fill-color: ${SIGN_IN_COLORS.inactive.inputText};
-    -webkit-box-shadow: 0 0 0px 45px ${SIGN_IN_COLORS.inactive.inputBackground} inset;
-    box-shadow: 0 0 0px 45px ${SIGN_IN_COLORS.inactive.inputBackground} inset;
+    color: #AFAFAF;
+    background-color: #F2F2F2;
+    -webkit-text-fill-color: #AFAFAF;
+    -webkit-box-shadow: 0 0 0px 45px #F2F2F2 inset;
+    box-shadow: 0 0 0px 45px #F2F2F2 inset;
   }
 `;
 
@@ -138,9 +140,9 @@ const Button = styled.button`
   height: 45px;
   font-size: 21px;
   line-height: 26px;
-  color: ${SIGN_IN_COLORS.active.textButton};
-  background-color: ${SIGN_IN_COLORS.active.button};
-  opacity: ${SIGN_IN_COLORS.active.buttonOpacity};
+  color: #FFFFFF;
+  background-color: #52B6FF;
+  opacity: 1;
   border-radius: 5px;
   margin: 3px;
   border: none;
@@ -150,7 +152,7 @@ const Button = styled.button`
   align-items: center;
 
   &:disabled {
-    opacity: ${SIGN_IN_COLORS.inactive.buttonOpacity};
+    opacity: .7;
   }
 `;
 
@@ -162,7 +164,7 @@ const ButtonSwap = styled.button`
   box-sizing: border-box;
   text-decoration-line: underline;
   background-color: transparent;
-  color: ${SIGN_IN_COLORS.active.buttonSwapText};
+  color: #52B6FF;
   border: none;
   outline: none;
 `;
