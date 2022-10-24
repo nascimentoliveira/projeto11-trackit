@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import axios from 'axios';
 import UserContext from '../../UserContext';
 import { Link } from 'react-router-dom';
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { SIGN_IN_URL } from '../../constants/constants';
 import logo from '../../assets/images/Logo.png';
@@ -12,11 +12,19 @@ import 'react-toastify/dist/ReactToastify.css';
 
 export default function SignInPage() {
 
-  const { user, setUser } = useContext(UserContext);
+  const { setUser } = useContext(UserContext);
   const navigate = useNavigate();
   const [formEnabled, setFormEnabled] = useState(true);
   const [form, SetForm] = useState({ email: '', password: '' });
 
+  const user = JSON.parse(localStorage.getItem('TrackIt-User'));
+
+  useEffect(() => {
+    if (user !== null) {
+      navigate('/hoje');
+      setUser(user);
+    }}, []);
+    
   function handleForm(e) {
     const { name, value } = e.target
     SetForm({ ...form, [name]: value })
@@ -28,6 +36,7 @@ export default function SignInPage() {
     axios.post(SIGN_IN_URL, form)
       .then(res => {
         setUser(res.data);
+        localStorage.setItem('TrackIt-User', JSON.stringify(res.data));
         navigate('/hoje');
       })
       .catch(err => {
