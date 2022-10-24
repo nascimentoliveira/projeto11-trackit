@@ -5,15 +5,17 @@ import UserContext from '../../UserContext';
 import Spinner from '../../components/Spinner';
 import { useState, useContext } from 'react';
 import { CREATE_HABIT_URL } from '../../constants/urls';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function AddHabit() {
 
   const daysWeek = ['D', 'S', 'T', 'Q', 'Q', 'S', 'S'];
-  const { user } = useContext(UserContext);
+  const { user, progress, setProgress } = useContext(UserContext);
   const [formEnabled, setFormEnabled] = useState(true);
-  const { 
-    showAddHabit, 
-    setShowAddHabit, 
+  const {
+    showAddHabit,
+    setShowAddHabit,
     setRefresh,
     newHabit,
     setNewHabit
@@ -32,7 +34,7 @@ export default function AddHabit() {
     }
     else
       newDays = [...newHabit.days, day];
-      setNewHabit({ ...newHabit, days: newDays })
+    setNewHabit({ ...newHabit, days: newDays })
   }
 
   function sendHabit(e) {
@@ -48,17 +50,23 @@ export default function AddHabit() {
       .then(res => {
         setShowAddHabit(!showAddHabit)
         setNewHabit({ name: '', days: [] })
-        setRefresh(true)
+        setProgress({ ...progress, notDone: [...progress.notDone, res.data.id] })
+        setRefresh(Math.random())
       })
       .catch(err => {
-        alert(err.response.data.message)
-      });
+        toast.error(`Erro: ${err.response.data.message}`, {
+          position: toast.POSITION.TOP_CENTER,
+          theme: 'colored',
+        });
+      })
     setFormEnabled(true);
   }
 
   return (
     <AddHabitComponent onSubmit={sendHabit}>
+      <ToastContainer />
       <InputHabitName
+        data-identifier='input-habit-name'
         type='text'
         placeholder='nome do hábito'
         name='name'
@@ -71,6 +79,7 @@ export default function AddHabit() {
       <WeekDays>
         {daysWeek.map((day, index) =>
           <InputButtonWeek
+            data-identifier='week-day-btn'
             key={index}
             type='button'
             value={day}
@@ -82,12 +91,14 @@ export default function AddHabit() {
       </WeekDays>
       <Options>
         <InputCancel
+          data-identifier='cancel-habit-create-btn'
           type='button'
           value='Cancelar'
           disabled={!formEnabled}
           onClick={() => setShowAddHabit(!showAddHabit)}
         />
         <InputSubmit
+          data-identifier='save-habit-create-btn'
           type='submit'
           disabled={!formEnabled}
           onClick={sendHabit}

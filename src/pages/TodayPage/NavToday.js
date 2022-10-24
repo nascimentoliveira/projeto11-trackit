@@ -9,6 +9,9 @@ export default function NavToday() {
 
   const { progress } = useContext(UserContext);
 
+  const progressValue = ((progress.done.length > 0) ?
+    Math.round((progress.done.length / (progress.done.length + progress.notDone.length)) * 100) : 0);
+
   const dictWeekDays = {
     'Monday': 'Segunda',
     'Tuesday': 'Terça',
@@ -20,13 +23,13 @@ export default function NavToday() {
   }
 
   return (
-    <NavTodayComponent>
+    <NavTodayComponent data-identifier='today-infos'>
       <Today>{dictWeekDays[dayjs().format('dddd')]}, {dayjs().format('DD/MM')}</Today>
-      <Status some={(progress>0)}>
-        {(progress===0) ?
+      <Status some={(progressValue > 0)}>
+        {(progressValue === 0) ?
           'Nenhum hábito concluído ainda'
           :
-          `${progress}% dos hábitos concluído`
+          `${progressValue}% dos hábitos concluído`
         }
       </Status>
     </NavTodayComponent>

@@ -3,54 +3,117 @@ import axios from 'axios';
 import UserContext from '../../UserContext';
 import HabitContext from './HabitContext';
 import { TrashOutline } from 'react-ionicons';
+import { MutatingDots } from 'react-loader-spinner';
 import { HABITS_LIST_URL, DELETE_HABIT_URL } from '../../constants/urls';
 import { useState, useContext, useEffect } from 'react';
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function Habits() {
 
   const daysWeek = ['D', 'S', 'T', 'Q', 'Q', 'S', 'S'];
-  const { user } = useContext(UserContext);
+  const { user, progress, setProgress } = useContext(UserContext);
   const { refresh, setRefresh } = useContext(HabitContext);
   const [habitsList, setHabitsList] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
+  console.log(progress)
   const config = {
     headers: {
       Authorization: `Bearer ${user.token}`
     }
   }
 
+  function handleDelete(id) {
+    if (progress.done.includes(id)) {
+      progress.done.splice(progress.done.indexOf(id), 1)
+      setProgress(progress)
+    }
+    else {
+      progress.notDone.splice(progress.notDone.indexOf(id), 1)
+      setProgress(progress)
+    }
+  }
+
   function getHabit() {
+    setLoading(true)
     axios.get(HABITS_LIST_URL, config)
       .then(res => {
         setHabitsList(res.data)
-        setRefresh(false)
+        setLoading(false)
       })
-      .catch(err => console.log(err.response.data))
+      .catch(err => {
+        setLoading(false)
+        setError(true)
+        toast.error(`Erro: ${err.response.data.message}`, {
+          position: toast.POSITION.TOP_CENTER,
+          theme: 'colored',
+        });
+      })
   }
 
   useEffect(getHabit, [refresh])
 
-  function deleteHabit(id) {
-    axios.delete(`${DELETE_HABIT_URL}${id}`, config)
-      .then(setRefresh(true))
-      .catch(err => console.log(err.response.data))
+  function deleteHabit(id, name) {
+    if (window.confirm(`Deseja realmente excluir o hábito '${name}' ?`)) {
+      axios.delete(`${DELETE_HABIT_URL}${id}`, config)
+        .then(() => {
+          setRefresh(Math.random())
+          handleDelete(id)
+        })
+        .catch(err => {
+          toast.error(`Erro: ${err.response.data.message}`, {
+            position: toast.POSITION.TOP_CENTER,
+            theme: 'colored',
+          });
+        })
+    }
   }
 
   if (habitsList.length === 0) {
-    return (
-      <HabitComponent>
-        Você não tem nenhum hábito cadastrado ainda.
-        Adicione um hábito para começar a trackear!
-      </HabitComponent>
-    );
+    if (loading) {
+      return (
+        <HabitComponent>
+          <ToastContainer />
+          <MutatingDots
+            height='100'
+            width='100'
+            color='#52B6FF'
+            secondaryColor='#52B6FF'
+            radius='20'
+            ariaLabel='mutating-dots-loading'
+            wrapperStyle={{}}
+            wrapperClass=''
+            visible={true}
+          />
+        </HabitComponent>
+      );
+    } else if (error) {
+      return (
+        <HabitComponent>
+          <ToastContainer />
+          Um erro ocorreu!
+          Não foi possível carregar a lista de hábitos!
+        </HabitComponent>
+      );
+    } else {
+      return (
+        <HabitComponent data-identifier='no-habit-message'>
+          <ToastContainer />
+          Você não tem nenhum hábito cadastrado ainda.
+          Adicione um hábito para começar a trackear!
+        </HabitComponent>
+      );
+    }
   }
 
   return (
     <HabitComponent>
+      <ToastContainer />
       {habitsList.map(habit =>
         <HabitContainer key={habit.id}>
-          {habit.name}
+          <span data-identifier='habit-name'>{habit.name}</span>
           <WeekDays>
             {daysWeek.map((day, index) =>
               <Day
@@ -62,11 +125,12 @@ export default function Habits() {
             )}
           </WeekDays>
           <TrashButton
-            onClick={() => { deleteHabit(habit.id) }}
+            data-identifier='delete-habit-btn'
+            onClick={() => deleteHabit(habit.id, habit.name)}
           >
             <TrashOutline
               color={'#666666'}
-              title={'Deletar hábito'}
+              title={'Excluir hábito'}
               height='20px'
               width='20px'
             />
@@ -86,6 +150,9 @@ const HabitComponent = styled.section`
   font-size: 18px;
   line-height: 22px;
   color: #666666;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;
 
 const HabitContainer = styled.section`

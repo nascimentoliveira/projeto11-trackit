@@ -10,7 +10,7 @@ export default function Header() {
   return (
     <HeaderComponent>
       <Logo>TrackIt</Logo>
-      <User>
+      <User data-identifier='avatar'>
         <img src={user.image} alt={`Imagem de ${user.name}`} />
       </User>
     </HeaderComponent>

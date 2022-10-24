@@ -9,7 +9,7 @@ import { useState } from 'react';
 export default function HabitsPage() {
 
   const [showAddHabit, setShowAddHabit] = useState(false);
-  const [refresh, setRefresh] = useState(false);
+  const [refresh, setRefresh] = useState(Math.random());
   const [newHabit, setNewHabit] = useState({
     name: '',
     days: []

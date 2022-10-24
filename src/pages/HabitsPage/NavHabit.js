@@ -12,22 +12,25 @@ export default function NavHabit() {
     <NavHabitComponent>
       <NavOption>
         Meus hábitos
-        <button onClick={() => setShowAddHabit(!showAddHabit)}>
-        {showAddHabit ? 
-          <CloseOutline
-            color={'#FFFFFF'} 
-            title={'Fechar'}
-            height='20px'
-            width='20px'
-          /> 
-          : 
-          <AddOutline
-            color={'#FFFFFF'} 
-            title={'Adicionar'}
-            height='20px'
-            width='20px'
-          />
-        }
+        <button
+          data-identifier='create-habit-btn'
+          onClick={() => setShowAddHabit(!showAddHabit)}
+        >
+          {showAddHabit ?
+            <CloseOutline
+              color={'#FFFFFF'}
+              title={'Fechar'}
+              height='20px'
+              width='20px'
+            />
+            :
+            <AddOutline
+              color={'#FFFFFF'}
+              title={'Adicionar'}
+              height='20px'
+              width='20px'
+            />
+          }
         </button>
       </NavOption>
       {showAddHabit ? <AddHabit /> : ''}

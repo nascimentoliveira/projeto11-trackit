@@ -6,6 +6,8 @@ import { useNavigate } from 'react-router-dom';
 import { SIGN_UP_URL } from '../../constants/urls';
 import logo from '../../assets/images/Logo.png';
 import Spinner from '../../components/Spinner';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function SignUpPage() {
 
@@ -26,28 +28,32 @@ export default function SignUpPage() {
   function SignUp(e) {
     setFormEnabled(false);
     e.preventDefault();
-    console.log(user);
     axios.post(SIGN_UP_URL, user)
       .then(() => {
         navigate('/')
       })
       .catch(err => {
-        alert(err.response.data.message)
-        setUser({
+        toast.error(`Erro: ${err.response.data.message}`, {
+          position: toast.POSITION.TOP_CENTER,
+          theme: 'colored',
+        });
+        /* setUser({
           email: '',
           name: '',
           image: '',
           password: ''
-        });
+        }); */
         setFormEnabled(true);
       });
   }
 
   return (
     <PageContainer>
+      <ToastContainer />
       <img src={logo} alt='' />
       <Form onSubmit={SignUp}>
         <Input
+          data-identifier='input-email'
           type='email'
           placeholder='email'
           name='email'
@@ -58,6 +64,7 @@ export default function SignUpPage() {
         </Input>
 
         <Input
+          data-identifier='input-password'
           type='password'
           placeholder='senha'
           name='password'
@@ -68,6 +75,7 @@ export default function SignUpPage() {
         </Input>
 
         <Input
+          data-identifier='input-name'
           type='text'
           placeholder='nome'
           name='name'
@@ -78,6 +86,7 @@ export default function SignUpPage() {
         </Input>
 
         <Input
+          data-identifier='input-photo'
           type='text'
           placeholder='foto'
           name='image'
@@ -87,12 +96,19 @@ export default function SignUpPage() {
           required>
         </Input>
 
-        <Button type='submit' disabled={!formEnabled}>
+        <Button
+          type='submit'
+          disabled={!formEnabled}
+        >
           {formEnabled ? 'Cadastrar' : Spinner('60')}
         </Button>
       </Form>
       <Link to='/'>
-        <ButtonSwap>Já tem uma conta? Faça login!</ButtonSwap>
+        <ButtonSwap
+          data-identifier='back-to-login-action'
+        >
+          Já tem uma conta? Faça login!
+        </ButtonSwap>
       </Link>
     </PageContainer>
   );
@@ -138,7 +154,7 @@ const Input = styled.input`
     font-family: 'Lexend Deca', sans-serif;
     font-size: 20px;
     line-height: 25px;
-    color: #666666;
+    color: #DBDBDB;
   }
 
   &:focus {

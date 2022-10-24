@@ -11,3 +11,5 @@ export const DELETE_HABIT_URL = 'https://mock-api.bootcamp.respondeai.com.br/api
 export const HABITS_LIST_TODAY_URL = 'https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/today';
 
 export const HABIT_CHECK_URL = 'https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/';
+
+export const HISTORIC_URL = 'https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/history/daily';

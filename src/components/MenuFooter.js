@@ -9,15 +9,18 @@ function MenuFooter() {
 
   const { progress } = useContext(UserContext);
 
+  const progressValue = ((progress.done.length > 0) ?
+    Math.round((progress.done.length / (progress.done.length + progress.notDone.length)) * 100) : 0);
+
   return (
     <MenuFooterComponent>
       <Link to='/habitos'>
-        <Button>Hábitos</Button>
+        <Button data-identifier='habit-page-action'>Hábitos</Button>
       </Link>
       <Link to='/hoje'>
         <ButtonToday>
           <CircularProgressbarWithChildren
-            value={progress}
+            value={progressValue}
             background
             backgroundPadding={6}
             styles={buildStyles({
@@ -30,7 +33,7 @@ function MenuFooter() {
         </ButtonToday>
       </Link>
       <Link to='/historico'>
-        <Button>Histórico</Button>
+        <Button data-identifier='historic-page-action'>Histórico</Button>
       </Link>
     </MenuFooterComponent>
   );

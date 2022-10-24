@@ -1,15 +1,20 @@
 import styled from 'styled-components';
 import axios from 'axios';
 import UserContext from '../../UserContext';
+import { MutatingDots } from 'react-loader-spinner';
 import { HABITS_LIST_TODAY_URL, HABIT_CHECK_URL } from '../../constants/urls';
 import { useState, useContext, useEffect } from 'react';
 import { Checkbox } from 'react-ionicons';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function HabitsToday() {
 
   const { user, setProgress } = useContext(UserContext);
   const [habitsList, setHabitsList] = useState([]);
-  const [refresh, setRefresh] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
+  const [checkLoading, setCheckLoading] = useState([]);
 
   const config = {
     headers: {
@@ -17,67 +22,121 @@ export default function HabitsToday() {
     }
   }
 
-  function calProgress(habisDone) {
-    return Math.round((habisDone.filter(x => x).length/habisDone.length)*100);
+  function calcProgress(habits) {
+    setProgress({
+      done: habits.filter(habit => habit.done).map(habit => habit.id),
+      notDone: habits.filter(habit => !habit.done).map(habit => habit.id)
+    });
   }
 
   function getHabitsList() {
     axios.get(HABITS_LIST_TODAY_URL, config)
       .then(res => {
         setHabitsList(res.data)
-        setProgress(calProgress(res.data.map(habit => habit.done)))
-        setRefresh(false)
+        calcProgress(res.data)
+        setLoading(false)
       })
-      .catch(err => console.log(err.response.data))
+      .catch(err => {
+        setLoading(false)
+        setError(true)
+        toast.error(`Erro: ${err.response.data.message}`, {
+          position: toast.POSITION.TOP_CENTER,
+          theme: 'colored',
+        });
+      })
   }
 
-  useEffect(getHabitsList, [refresh])
+  useEffect(getHabitsList, [checkLoading])
 
   function checkHandle(id, isDone) {
-    if (isDone) {
-      axios.post(`${HABIT_CHECK_URL}${id}/uncheck`, {}, config)
-        .then(() => setRefresh(true))
-        .catch(err => console.log(err.response))
-    } else {
-      axios.post(`${HABIT_CHECK_URL}${id}/check`, {}, config)
-        .then(() => setRefresh(true))
-        .catch(err => console.log(err.response))
+    if (!checkLoading.includes(id)) {
+      checkLoading.push(id)
+      setCheckLoading(checkLoading);
+      if (isDone) {
+        axios.post(`${HABIT_CHECK_URL}${id}/uncheck`, {}, config)
+          .then(() => {
+            setCheckLoading(checkLoading.splice(checkLoading.indexOf(id), 1));
+          })
+          .catch(err => {
+            toast.error(`Erro: ${err.response.data.message}`, {
+              position: toast.POSITION.TOP_CENTER,
+              theme: 'colored',
+            });
+          });
+      } else {
+        axios.post(`${HABIT_CHECK_URL}${id}/check`, {}, config)
+          .then(() => {
+            setCheckLoading(checkLoading.splice(checkLoading.indexOf(id), 1));
+          })
+          .catch(err => {
+            toast.error(`Erro: ${err.response.data.message}`, {
+              position: toast.POSITION.TOP_CENTER,
+              theme: 'colored',
+            });
+          })
+      }
     }
   }
 
   if (habitsList.length === 0) {
-    return (
-      <TodayComponent>
-        Você não tem nenhum hábito cadastrado ainda.
-        Adicione um hábito para começar a trackear!
-      </TodayComponent>
-    );
+    if (loading) {
+      return (
+        <TodayComponent>
+          <ToastContainer />
+          <MutatingDots
+            height='100'
+            width='100'
+            color='#52B6FF'
+            secondaryColor='#52B6FF'
+            radius='20'
+            ariaLabel='mutating-dots-loading'
+            wrapperStyle={{}}
+            wrapperClass=''
+            visible={true}
+          />
+        </TodayComponent>
+      );
+    } else if (error) {
+      return (
+        <TodayComponent>
+          <ToastContainer />
+          Um erro ocorreu!
+          Não foi possível carregar a lista de hábitos!
+        </TodayComponent>
+      );
+    } else {
+      return (
+        <TodayComponent>
+          <ToastContainer />
+          Você não tem nenhum hábito cadastrado ainda.
+          Adicione um hábito para começar a trackear!
+        </TodayComponent>
+      );
+    }
   }
 
   return (
     <TodayComponent>
+      <ToastContainer />
       {habitsList.map(habit =>
-        <HabitTodayContainer
-          key={habit.id}
-          isDone={habit.done}
-          isRercord={(habit.highestSequence === habit.currentSequence) && (habit.currentSequence > 0)}
-        >
+        <HabitTodayContainer key={habit.id}>
           <div>
             <h1>{habit.name}</h1>
-            <h2>
+            <CurrentSequence isDone={habit.done}>
               {'Sequência Atual: '}
-              <span>
-                {habit.currentSequence} dias
+              <span >
+                {(habit.currentSequence > 1) ? `${habit.currentSequence} dias` : `${habit.currentSequence} dia`}
               </span>
-            </h2>
-            <h2>
+            </CurrentSequence>
+            <Record isRercord={((habit.highestSequence === habit.currentSequence) && (habit.currentSequence > 0) && (habit.done))}>
               {'Seu recorde: '}
               <span>
-                {habit.highestSequence} dias
+                {(habit.currentSequence > 1) ? `${habit.highestSequence} dias` : `${habit.highestSequence} dia`}
               </span>
-            </h2>
+            </Record>
           </div>
           <CheckIcon
+            data-identifier='done-habit-btn'
             isDone={habit.done}
             onClick={() => checkHandle(habit.id, habit.done)}
           >
@@ -102,6 +161,9 @@ const TodayComponent = styled.section`
   font-size: 18px;
   line-height: 22px;
   color: #666666;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;
 
 const HabitTodayContainer = styled.section`
@@ -124,21 +186,29 @@ const HabitTodayContainer = styled.section`
       font-size: 20px;
       line-height: 25px;
       color: #666666;
-
-      span {
-        color: ${props => props.isDone ? '#8FC549' : '#666666'};
-      }
     }
+  }
+`;
 
-    h2 {
-      font-size: 13px;
-      line-height: 16px;
-      color: #666666;
+const CurrentSequence = styled.h2`
+  font-family: 'Lexend Deca', sans-serif;
+  font-size: 13px;
+  line-height: 16px;
+  color: #666666;
 
-      span {
-        color: ${props => props.isRercord ? '#8FC549' : '#666666'};
-      }
-    }
+  span {
+    color: ${props => props.isDone ? '#8FC549' : '#666666'};
+  }
+`;
+
+const Record = styled.h2`
+  font-family: 'Lexend Deca', sans-serif;
+  font-size: 13px;
+  line-height: 16px;
+  color: #666666;
+
+  span {
+    color: ${props => props.isRercord ? '#8FC549' : '#666666'};
   }
 `;
 

@@ -7,6 +7,8 @@ import { useNavigate } from 'react-router-dom';
 import { SIGN_IN_URL } from '../../constants/urls';
 import logo from '../../assets/images/Logo.png';
 import Spinner from '../../components/Spinner';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function SignInPage() {
 
@@ -29,17 +31,22 @@ export default function SignInPage() {
         navigate('/hoje');
       })
       .catch(err => {
-        alert(err.response.data.message)
-        SetForm({ email: '', password: '' });
+        toast.error(`Erro: ${err.response.data.message}`, {
+          position: toast.POSITION.TOP_CENTER,
+          theme: 'colored',
+        });
+        //SetForm({ email: '', password: '' });
         setFormEnabled(true);
       });
   }
 
   return (
     <PageContainer>
+      <ToastContainer />
       <img src={logo} alt='' />
       <Form onSubmit={SignIn}>
         <Input
+          data-identifier='input-email'
           type='email'
           placeholder='email'
           name='email'
@@ -51,6 +58,7 @@ export default function SignInPage() {
         </Input>
 
         <Input
+          data-identifier='input-password'
           type='password'
           placeholder='senha'
           name='password'
@@ -61,12 +69,19 @@ export default function SignInPage() {
         >
         </Input>
 
-        <Button type='submit' disabled={!formEnabled}>
+        <Button
+          data-identifier='login-btn'
+          type='submit'
+          disabled={!formEnabled}>
           {formEnabled ? 'Entrar' : Spinner('60')}
         </Button>
       </Form>
       <Link to='/cadastro'>
-        <ButtonSwap>Não tem uma conta? Cadastre-se!</ButtonSwap>
+        <ButtonSwap
+          data-identifier='sign-up-action'
+        >
+          Não tem uma conta? Cadastre-se!
+        </ButtonSwap>
       </Link>
     </PageContainer>
   );
