@@ -3,7 +3,7 @@ import axios from 'axios';
 import UserContext from '../../UserContext';
 import Spinner from '../../components/Spinner';
 import { MutatingDots } from 'react-loader-spinner';
-import { HABITS_LIST_TODAY_URL, HABIT_CHECK_URL } from '../../constants/urls';
+import { HABITS_LIST_TODAY_URL, HABIT_CHECK_URL } from '../../constants/constants';
 import { useState, useContext, useEffect } from 'react';
 import { Checkbox } from 'react-ionicons';
 import { ToastContainer, toast } from 'react-toastify';
@@ -186,7 +186,7 @@ const HabitTodayContainer = styled.section`
   background: #FFFFFF;
   border-radius: 5px;
   padding: 13px;
-  margin: 10px 0px;
+  margin-bottom: 10px;
   box-sizing: border-box;
   display: flex;
   justify-content: space-between;

@@ -45,13 +45,12 @@ const NavHabitComponent = styled.nav`
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 28px 0px;
+  padding: 20px 0px;
   box-sizing: border-box;
 `;
 
 const NavOption = styled.section`
   width: 100%;
-  height: 85px;
   display: flex;
   justify-content: space-between;
   font-size: 23px;

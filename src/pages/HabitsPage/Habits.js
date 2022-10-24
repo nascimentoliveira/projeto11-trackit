@@ -4,14 +4,13 @@ import UserContext from '../../UserContext';
 import HabitContext from './HabitContext';
 import { TrashOutline } from 'react-ionicons';
 import { MutatingDots } from 'react-loader-spinner';
-import { HABITS_LIST_URL, DELETE_HABIT_URL } from '../../constants/urls';
+import { HABITS_LIST_URL, DELETE_HABIT_URL, DAYS_WEEK } from '../../constants/constants';
 import { useState, useContext, useEffect } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 export default function Habits() {
 
-  const daysWeek = ['D', 'S', 'T', 'Q', 'Q', 'S', 'S'];
   const { user, progress, setProgress } = useContext(UserContext);
   const { refresh, setRefresh } = useContext(HabitContext);
   const [habitsList, setHabitsList] = useState([]);
@@ -29,7 +28,7 @@ export default function Habits() {
       progress.done.splice(progress.done.indexOf(id), 1);
       setProgress(progress);
     }
-    else {
+    else if (progress.notDone.includes(id)) {
       progress.notDone.splice(progress.notDone.indexOf(id), 1);
       setProgress(progress);
     }
@@ -114,7 +113,7 @@ export default function Habits() {
         <HabitContainer key={habit.id}>
           <span data-identifier='habit-name'>{habit.name}</span>
           <WeekDays>
-            {daysWeek.map((day, index) =>
+            {DAYS_WEEK.map((day, index) =>
               <Day
                 key={index}
                 isSelected={habit.days.some((x) => x === index)}
@@ -160,7 +159,7 @@ const HabitContainer = styled.section`
   background: #FFFFFF;
   border-radius: 5px;
   padding: 15px;
-  margin: 10px 0px;
+  margin-bottom: 10px;
   box-sizing: border-box;
   font-family: 'Lexend Deca', sans-serif;
   font-size: 20px;

@@ -4,7 +4,7 @@ import '../../assets/styles/Calendar.css';
 import axios from 'axios';
 import UserContext from '../../UserContext';
 import { useState, useContext, useEffect } from 'react';
-import { HISTORIC_URL } from '../../constants/urls';
+import { HISTORIC_URL } from '../../constants/constants';
 import { MutatingDots } from 'react-loader-spinner';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';

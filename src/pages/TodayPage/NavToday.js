@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import dayjs from 'dayjs';
 import UserContext from '../../UserContext';
+import { DICT_WEEK_DAYS} from '../../constants/constants';
 import { useContext } from 'react';
 //import 'dayjs/locale/pt-br'
 //dayjs.locale('pt-br')
@@ -12,19 +13,9 @@ export default function NavToday() {
   const progressValue = ((progress.done.length > 0) ?
     Math.round((progress.done.length / (progress.done.length + progress.notDone.length)) * 100) : 0);
 
-  const dictWeekDays = {
-    'Monday': 'Segunda',
-    'Tuesday': 'Terça',
-    'Wednesday': 'Quarta',
-    'Thursday': 'Quinta',
-    'Friday': 'Sexta',
-    'Saturday': 'Sábado',
-    'Sunday': 'Domingo'
-  }
-
   return (
     <NavTodayComponent data-identifier='today-infos'>
-      <Today>{dictWeekDays[dayjs().format('dddd')]}, {dayjs().format('DD/MM')}</Today>
+      <Today>{DICT_WEEK_DAYS[dayjs().format('dddd')]}, {dayjs().format('DD/MM')}</Today>
       <Status some={(progressValue > 0)}>
         {(progressValue === 0) ?
           'Nenhum hábito concluído ainda'
@@ -42,7 +33,7 @@ const NavTodayComponent = styled.nav`
   font-family: 'Lexend Deca', sans-serif;
   display: flex;
   flex-direction: column;
-  padding: 28px 18px;
+  padding: 28px 0px;
   box-sizing: border-box;
 `;
 

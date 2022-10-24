@@ -4,7 +4,7 @@ import UserContext from '../../UserContext';
 import { Link } from 'react-router-dom';
 import { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { SIGN_IN_URL } from '../../constants/urls';
+import { SIGN_IN_URL } from '../../constants/constants';
 import logo from '../../assets/images/Logo.png';
 import Spinner from '../../components/Spinner';
 import { ToastContainer, toast } from 'react-toastify';

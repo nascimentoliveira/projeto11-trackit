@@ -4,22 +4,22 @@ import HabitContext from './HabitContext';
 import UserContext from '../../UserContext';
 import Spinner from '../../components/Spinner';
 import { useState, useContext } from 'react';
-import { CREATE_HABIT_URL } from '../../constants/urls';
+import { CREATE_HABIT_URL, DAYS_WEEK, DICT_NUM_DAYS } from '../../constants/constants';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import dayjs from 'dayjs';
 
 export default function AddHabit() {
 
-  const daysWeek = ['D', 'S', 'T', 'Q', 'Q', 'S', 'S'];
-  const { user, progress, setProgress } = useContext(UserContext);
+  const { user, progress, setProgress, newHabit, setNewHabit } = useContext(UserContext);
   const [formEnabled, setFormEnabled] = useState(true);
-  const {
-    showAddHabit,
-    setShowAddHabit,
-    setRefresh,
-    newHabit,
-    setNewHabit
-  } = useContext(HabitContext);
+  const { showAddHabit, setShowAddHabit, setRefresh } = useContext(HabitContext);
+
+  const config = {
+    headers: {
+      Authorization: `Bearer ${user.token}`
+    }
+  };
 
   function handleForm(e) {
     const { name, value } = e.target;
@@ -38,29 +38,31 @@ export default function AddHabit() {
   }
 
   function sendHabit(e) {
-    const config = {
-      headers: {
-        Authorization: `Bearer ${user.token}`
-      }
-    }
-
-    setFormEnabled(false);
     e.preventDefault();
-    axios.post(CREATE_HABIT_URL, newHabit, config)
-      .then(res => {
-        setShowAddHabit(!showAddHabit);
-        setNewHabit({ name: '', days: [] });
-        setProgress({ ...progress, notDone: [...progress.notDone, res.data.id] });
-        setRefresh(Math.random());
-        setFormEnabled(true);
-      })
-      .catch(err => {
-        toast.error(`Erro: ${err.response.data.message}`, {
-          position: toast.POSITION.TOP_CENTER,
-          theme: 'colored',
-        });
-        setFormEnabled(true);
-      })
+    if (newHabit.days.length === 0) {
+      toast.error(`Selecione pelo menos 1 dia da semana!`, {
+        position: toast.POSITION.TOP_CENTER,
+        theme: 'colored',
+      });
+    } else {
+      setFormEnabled(false);
+      axios.post(CREATE_HABIT_URL, newHabit, config)
+        .then(res => {
+          setShowAddHabit(!showAddHabit);
+          setNewHabit({ name: '', days: [] });
+          if (newHabit.days.includes(DICT_NUM_DAYS[dayjs().format('dddd')]))
+            setProgress({ ...progress, notDone: [...progress.notDone, res.data.id] });
+          setRefresh(Math.random());
+          setFormEnabled(true);
+        })
+        .catch(err => {
+          toast.error(`Erro: ${err.response.data.message}`, {
+            position: toast.POSITION.TOP_CENTER,
+            theme: 'colored',
+          });
+          setFormEnabled(true);
+        })
+    }
   }
 
   return (
@@ -78,7 +80,7 @@ export default function AddHabit() {
       >
       </InputHabitName>
       <WeekDays>
-        {daysWeek.map((day, index) =>
+        {DAYS_WEEK.map((day, index) =>
           <InputButtonWeek
             data-identifier='week-day-btn'
             key={index}
@@ -107,7 +109,7 @@ export default function AddHabit() {
           {formEnabled ? 'Salvar' : Spinner('30')}
         </InputSubmit>
       </Options>
-    </AddHabitComponent>
+    </AddHabitComponent >
   );
 }
 

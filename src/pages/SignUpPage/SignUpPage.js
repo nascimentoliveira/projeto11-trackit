@@ -3,7 +3,7 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { SIGN_UP_URL } from '../../constants/urls';
+import { SIGN_UP_URL } from '../../constants/constants';
 import logo from '../../assets/images/Logo.png';
 import Spinner from '../../components/Spinner';
 import { ToastContainer, toast } from 'react-toastify';

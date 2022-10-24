@@ -12,6 +12,7 @@ function App() {
 
   const [user, setUser] = useState('');
   const [progress, setProgress] = useState({ done: [], notDone: [] });
+  const [newHabit, setNewHabit] = useState({ name: '', days: [] });
 
   return (
     <UserContext.Provider
@@ -19,7 +20,9 @@ function App() {
         user,
         setUser,
         progress,
-        setProgress
+        setProgress,
+        newHabit, 
+        setNewHabit
       }}>
       <BrowserRouter>
         <GlobalStyle />
