@@ -4,7 +4,6 @@ import NavToday from './NavToday';
 import HabitsToday from './HabitsToday';
 import MenuFooter from '../../components/MenuFooter';
 
-
 export default function TodayPage() {
   return (
     <PageContainer>

@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import axios from 'axios';
 import UserContext from '../../UserContext';
+import Spinner from '../../components/Spinner';
 import { MutatingDots } from 'react-loader-spinner';
 import { HABITS_LIST_TODAY_URL, HABIT_CHECK_URL } from '../../constants/urls';
 import { useState, useContext, useEffect } from 'react';
@@ -20,7 +21,7 @@ export default function HabitsToday() {
     headers: {
       Authorization: `Bearer ${user.token}`
     }
-  }
+  };
 
   function calcProgress(habits) {
     setProgress({
@@ -29,12 +30,14 @@ export default function HabitsToday() {
     });
   }
 
-  function getHabitsList() {
+  function getHabitsList(id) {
     axios.get(HABITS_LIST_TODAY_URL, config)
       .then(res => {
-        setHabitsList(res.data)
-        calcProgress(res.data)
-        setLoading(false)
+        setHabitsList(res.data);
+        calcProgress(res.data);
+        setLoading(false);
+        checkLoading.splice(checkLoading.indexOf(id), 1);
+        setCheckLoading(checkLoading);
       })
       .catch(err => {
         setLoading(false)
@@ -43,38 +46,40 @@ export default function HabitsToday() {
           position: toast.POSITION.TOP_CENTER,
           theme: 'colored',
         });
+        checkLoading.splice(checkLoading.indexOf(id), 1);
+        setCheckLoading(checkLoading);
       })
   }
 
-  useEffect(getHabitsList, [checkLoading])
+  useEffect(() => getHabitsList(), []);
 
   function checkHandle(id, isDone) {
-    if (!checkLoading.includes(id)) {
-      checkLoading.push(id)
-      setCheckLoading(checkLoading);
-      if (isDone) {
-        axios.post(`${HABIT_CHECK_URL}${id}/uncheck`, {}, config)
-          .then(() => {
-            setCheckLoading(checkLoading.splice(checkLoading.indexOf(id), 1));
-          })
-          .catch(err => {
-            toast.error(`Erro: ${err.response.data.message}`, {
-              position: toast.POSITION.TOP_CENTER,
-              theme: 'colored',
-            });
+    if (isDone) {
+      axios.post(`${HABIT_CHECK_URL}${id}/uncheck`, {}, config)
+        .then(() => {
+          getHabitsList(id);
+        })
+        .catch(err => {
+          toast.error(`Erro: ${err.response.data.message}`, {
+            position: toast.POSITION.TOP_CENTER,
+            theme: 'colored',
           });
-      } else {
-        axios.post(`${HABIT_CHECK_URL}${id}/check`, {}, config)
-          .then(() => {
-            setCheckLoading(checkLoading.splice(checkLoading.indexOf(id), 1));
-          })
-          .catch(err => {
-            toast.error(`Erro: ${err.response.data.message}`, {
-              position: toast.POSITION.TOP_CENTER,
-              theme: 'colored',
-            });
-          })
-      }
+          checkLoading.splice(checkLoading.indexOf(id), 1);
+          setCheckLoading(checkLoading);
+        });
+    } else {
+      axios.post(`${HABIT_CHECK_URL}${id}/check`, {}, config)
+        .then(() => {
+          getHabitsList(id);
+        })
+        .catch(err => {
+          toast.error(`Erro: ${err.response.data.message}`, {
+            position: toast.POSITION.TOP_CENTER,
+            theme: 'colored',
+          });
+          checkLoading.splice(checkLoading.indexOf(id), 1);
+          setCheckLoading(checkLoading);
+        })
     }
   }
 
@@ -138,19 +143,27 @@ export default function HabitsToday() {
           <CheckIcon
             data-identifier='done-habit-btn'
             isDone={habit.done}
-            onClick={() => checkHandle(habit.id, habit.done)}
+            onClick={() => {
+              setCheckLoading([...checkLoading, habit.id])
+              checkHandle(habit.id, habit.done)
+            }}
+            disabled={checkLoading.includes(habit.id)}
           >
-            <Checkbox
-              color={habit.done ? '#8FC549' : '#EBEBEB'}
-              title={habit.done ? 'Desmarcar' : 'Marcar'}
-              height='90px'
-              width='90px'
-            />
+            {checkLoading.includes(habit.id) ?
+              Spinner('30')
+              :
+              <Checkbox
+                color={habit.done ? '#8FC549' : '#EBEBEB'}
+                title={habit.done ? 'Desmarcar' : 'Marcar'}
+                height='90px'
+                width='90px'
+              />
+            }
           </CheckIcon>
         </HabitTodayContainer>
       )}
     </TodayComponent>
-  )
+  );
 }
 
 const TodayComponent = styled.section`
@@ -213,14 +226,18 @@ const Record = styled.h2`
 `;
 
 const CheckIcon = styled.button`
-  width: 69px;
-  height: 69px;
+  width: 72px;
+  height: 72px;
   background-color: transparent;
   border: ${props => props.isDone ? 'none' : '1px solid #E7E7E7'};
-  border-radius: 5px;
+  border-radius: 12px;
   outline: none;
   border: none;
   display: flex;
   justify-content: center;
   align-items: center;
+
+  &:disabled {
+    background-color: ${props => props.isDone ? '#8FC549' : '#EBEBEB'};
+  }
 `;

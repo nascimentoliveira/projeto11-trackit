@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-function NavHistoric() {
+export default function NavHistoric() {
   return (
     <NavHistoricComponent>
       <span>Histórico</span>
@@ -8,9 +8,8 @@ function NavHistoric() {
   );
 }
 
-export default NavHistoric;
-
 const NavHistoricComponent = styled.nav`
+  max-width: 375px;
   width: 100%;
   font-family: 'Lexend Deca', sans-serif;
   display: flex;

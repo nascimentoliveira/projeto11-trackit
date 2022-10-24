@@ -17,9 +17,10 @@ export default function HabitsPage() {
 
   return (
     <HabitContext.Provider value={
-      { showAddHabit, 
-        setShowAddHabit, 
-        refresh, 
+      {
+        showAddHabit,
+        setShowAddHabit,
+        refresh,
         setRefresh,
         newHabit,
         setNewHabit
@@ -34,7 +35,6 @@ export default function HabitsPage() {
     </HabitContext.Provider>
   );
 }
-
 
 const PageContainer = styled.main`
   width: 100%;

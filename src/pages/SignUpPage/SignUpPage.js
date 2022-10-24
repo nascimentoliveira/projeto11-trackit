@@ -18,7 +18,7 @@ export default function SignUpPage() {
     name: '',
     image: '',
     password: ''
-  })
+  });
 
   function handleForm(e) {
     const { name, value } = e.target;
@@ -30,7 +30,7 @@ export default function SignUpPage() {
     e.preventDefault();
     axios.post(SIGN_UP_URL, user)
       .then(() => {
-        navigate('/')
+        navigate('/');
       })
       .catch(err => {
         toast.error(`Erro: ${err.response.data.message}`, {

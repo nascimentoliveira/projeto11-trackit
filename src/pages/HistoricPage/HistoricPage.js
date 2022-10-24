@@ -4,7 +4,7 @@ import NavHistoric from './NavHistoric';
 import Historic from './Historic';
 import MenuFooter from '../../components/MenuFooter';
 
-function HistoricPage() {
+export default function HistoricPage() {
   return (
     <PageContainer>
       <Header />
@@ -14,8 +14,6 @@ function HistoricPage() {
     </PageContainer>
   );
 }
-
-export default HistoricPage;
 
 const PageContainer = styled.main`
   width: 100%;

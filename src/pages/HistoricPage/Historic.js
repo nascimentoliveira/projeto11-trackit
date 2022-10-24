@@ -15,32 +15,31 @@ export default function Historic() {
   const [value, onChange] = useState(new Date());
   const [loading, setLoading] = useState(true);
   const [historic, setHistoric] = useState([]);
-  const [error, setError] = useState(false); 
-  
+  const [error, setError] = useState(false);
+
   const config = {
     headers: {
       Authorization: `Bearer ${user.token}`
     }
-  }
+  };
 
   function getHistoric() {
     axios.get(HISTORIC_URL, config)
       .then(res => {
-        setHistoric(res.data)
-        setLoading(false)
+        setHistoric(res.data);
+        setLoading(false);
       })
       .catch(err => {
-        setLoading(false)
-        setError(true)
+        setLoading(false);
+        setError(true);
         toast.error(`Erro: ${err.response.data.message}`, {
           position: toast.POSITION.TOP_CENTER,
           theme: 'colored',
         });
-      })
+      });
   }
 
-  useEffect(getHistoric, [])
-  console.log(historic)
+  useEffect(getHistoric, []);
 
   if (loading) {
     return (
@@ -71,9 +70,9 @@ export default function Historic() {
     return (
       <HistoricComponent>
         <ToastContainer />
-        <Calendar 
-          onChange={onChange} 
-          value={value} 
+        <Calendar
+          onChange={onChange}
+          value={value}
         />
       </HistoricComponent>
     );
@@ -82,8 +81,13 @@ export default function Historic() {
 }
 
 const HistoricComponent = styled.section`
+  max-width: 375px;
+  width: 100%;
   font-family: 'Lexend Deca', sans-serif; 
   font-size: 18px;
   line-height: 22px;
   color: #666666;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;  

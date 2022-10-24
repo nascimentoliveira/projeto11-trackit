@@ -11,7 +11,7 @@ import HistoricPage from './pages/HistoricPage/HistoricPage';
 function App() {
 
   const [user, setUser] = useState('');
-  const [progress, setProgress] = useState({done:[], notDone:[]});
+  const [progress, setProgress] = useState({ done: [], notDone: [] });
 
   return (
     <UserContext.Provider

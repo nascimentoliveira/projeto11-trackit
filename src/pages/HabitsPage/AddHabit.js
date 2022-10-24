@@ -22,19 +22,19 @@ export default function AddHabit() {
   } = useContext(HabitContext);
 
   function handleForm(e) {
-    const { name, value } = e.target
-    setNewHabit({ ...newHabit, [name]: value })
+    const { name, value } = e.target;
+    setNewHabit({ ...newHabit, [name]: value });
   }
 
   function handleDays(day) {
     let newDays = [];
     if (newHabit.days.some((x) => x === day)) {
       newHabit.days.splice(newHabit.days.indexOf(day), 1);
-      newDays = newHabit.days
+      newDays = newHabit.days;
     }
     else
       newDays = [...newHabit.days, day];
-    setNewHabit({ ...newHabit, days: newDays })
+    setNewHabit({ ...newHabit, days: newDays });
   }
 
   function sendHabit(e) {
@@ -48,18 +48,19 @@ export default function AddHabit() {
     e.preventDefault();
     axios.post(CREATE_HABIT_URL, newHabit, config)
       .then(res => {
-        setShowAddHabit(!showAddHabit)
-        setNewHabit({ name: '', days: [] })
-        setProgress({ ...progress, notDone: [...progress.notDone, res.data.id] })
-        setRefresh(Math.random())
+        setShowAddHabit(!showAddHabit);
+        setNewHabit({ name: '', days: [] });
+        setProgress({ ...progress, notDone: [...progress.notDone, res.data.id] });
+        setRefresh(Math.random());
+        setFormEnabled(true);
       })
       .catch(err => {
         toast.error(`Erro: ${err.response.data.message}`, {
           position: toast.POSITION.TOP_CENTER,
           theme: 'colored',
         });
+        setFormEnabled(true);
       })
-    setFormEnabled(true);
   }
 
   return (

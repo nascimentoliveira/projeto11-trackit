@@ -18,21 +18,20 @@ export default function Habits() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
 
-  console.log(progress)
   const config = {
     headers: {
       Authorization: `Bearer ${user.token}`
     }
-  }
+  };
 
   function handleDelete(id) {
     if (progress.done.includes(id)) {
-      progress.done.splice(progress.done.indexOf(id), 1)
-      setProgress(progress)
+      progress.done.splice(progress.done.indexOf(id), 1);
+      setProgress(progress);
     }
     else {
-      progress.notDone.splice(progress.notDone.indexOf(id), 1)
-      setProgress(progress)
+      progress.notDone.splice(progress.notDone.indexOf(id), 1);
+      setProgress(progress);
     }
   }
 
@@ -40,34 +39,34 @@ export default function Habits() {
     setLoading(true)
     axios.get(HABITS_LIST_URL, config)
       .then(res => {
-        setHabitsList(res.data)
-        setLoading(false)
+        setHabitsList(res.data);
+        setLoading(false);
       })
       .catch(err => {
-        setLoading(false)
-        setError(true)
+        setLoading(false);
+        setError(true);
         toast.error(`Erro: ${err.response.data.message}`, {
           position: toast.POSITION.TOP_CENTER,
           theme: 'colored',
         });
-      })
+      });
   }
 
-  useEffect(getHabit, [refresh])
+  useEffect(getHabit, [refresh]);
 
   function deleteHabit(id, name) {
     if (window.confirm(`Deseja realmente excluir o hábito '${name}' ?`)) {
       axios.delete(`${DELETE_HABIT_URL}${id}`, config)
         .then(() => {
-          setRefresh(Math.random())
-          handleDelete(id)
+          setRefresh(Math.random());
+          handleDelete(id);
         })
         .catch(err => {
           toast.error(`Erro: ${err.response.data.message}`, {
             position: toast.POSITION.TOP_CENTER,
             theme: 'colored',
           });
-        })
+        });
     }
   }
 
@@ -139,7 +138,7 @@ export default function Habits() {
 
       )}
     </HabitComponent>
-  )
+  );
 }
 
 const HabitComponent = styled.section`
