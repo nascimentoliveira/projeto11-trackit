@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import UserContext from '../UserContext';
 import { useContext } from 'react';
-
+import { Link } from 'react-router-dom';
 
 export default function Header() {
 
@@ -9,7 +9,11 @@ export default function Header() {
 
   return (
     <HeaderComponent>
-      <Logo>TrackIt</Logo>
+      <Link to='/' style={{ textDecoration: 'none' }}>
+        <Logo>
+          TrackIt
+        </Logo>
+      </Link>
       <User data-identifier='avatar'>
         <img src={user.image} alt={`Imagem de ${user.name}`} />
       </User>
